@@ -74,6 +74,15 @@ class Main(QDialog):
         layout_number.addWidget(button_reverse, 6, 1)
         layout_number.addWidget(button_decimal, 6, 3)
 
+        ### %, 1/x, x^2, x^0.5 기능 추가
+        button_mod.clicked.connect(lambda state, operation="%": self.button_operation_clicked(operation))
+        button_decimal.clicked.connect(lambda state, operation=".": self.button_operation_clicked(operation))
+        button_flip.clicked.connect(self.button_inverse_clicked)
+        button_pow.clicked.connect(self.button_pow_clicked)
+        button_sqrt.clicked.connect(self.button_square_clicked)
+        button_reverse.clicked.connect(self.button_reverse_clicked)
+
+
 
         ### 숫자 버튼 생성하고, layout_number 레이아웃에 추가
         ### 각 숫자 버튼을 클릭했을 때, 숫자가 수식창에 입력 될 수 있도록 시그널 설정
@@ -105,16 +114,13 @@ class Main(QDialog):
 
     def button_operation_clicked(self, operation):
         equation = self.equation.text()
-        # 캐시가 비어 있으면 캐시로 넣는다.
         if self.cache == "":
             self.cache = equation + operation
             self.equation.setText("")
             return
-        # 입력값이 없다면, 연산만 바꾼다.
         if equation == "":
             self.cache = self.cache[:-1] + operation
             return
-        # 입력값이 있으면, 계산 후 캐시에 다시 저장한다.
         value = eval(self.cache + equation)
         self.cache = str(value) + operation
         self.equation.setText("")
@@ -133,6 +139,29 @@ class Main(QDialog):
         equation = self.equation.text()
         equation = equation[:-1]
         self.equation.setText(equation)
+
+    def unary_operation(self, fn):
+        equation = self.equation.text()
+        if equation == "":
+            return
+        n = 0
+        if self.cache != "":
+            n = eval(self.cache + equation)
+        else:
+            n = float(equation)
+        self.equation.setText(str(fn(n)))
+
+    def button_inverse_clicked(self):
+        self.unary_operation(lambda x: 1/x)
+
+    def button_pow_clicked(self):
+        self.unary_operation(lambda x: x*x)
+
+    def button_square_clicked(self):
+        self.unary_operation(lambda x: math.sqrt(x))
+
+    def button_reverse_clicked(self):
+        self.unary_operation(lambda x: -x)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
