@@ -42,16 +42,37 @@ class Main(QDialog):
 
         ### =, clear, backspace 버튼 생성
         button_equal = QPushButton("=")
+        button_C = QPushButton("C")
+        button_CE = QPushButton("CE")
         button_backspace = QPushButton("Backspace")
 
         ### =, C, CE, backspace 버튼을 layout_clear_equal 레이아웃에 추가
         layout_number.addWidget(button_backspace,1,4)
+        layout_number.addWidget(button_CE, 1, 2)
+        layout_number.addWidget(button_C, 1, 3)
         layout_number.addWidget(button_equal,6,4)
 
         ### =, clear, backspace 버튼 클릭 시 시그널 설정
         button_equal.clicked.connect(self.button_equal_clicked)
+        button_C.clicked.connect(self.button_clear_clicked)
+        button_CE.clicked.connect(self.button_clear_clicked)
         button_backspace.clicked.connect(self.button_backspace_clicked)
 
+        ### %, 1/x, x^2, x^0.5 버튼 생성, +/-, . 버튼 변경
+        button_mod = QPushButton("%")
+        button_flip = QPushButton("1/x")
+        button_pow = QPushButton("x^2")
+        button_sqrt = QPushButton("x^0.5")
+        button_reverse = QPushButton("+/-")
+        button_decimal = QPushButton(".")
+
+        ### 버튼 레이아웃에 추가
+        layout_number.addWidget(button_mod, 1, 1)
+        layout_number.addWidget(button_flip, 2, 1)
+        layout_number.addWidget(button_pow, 2, 2)
+        layout_number.addWidget(button_sqrt, 2, 3)
+        layout_number.addWidget(button_reverse, 6, 1)
+        layout_number.addWidget(button_decimal, 6, 3)
 
 
         ### 숫자 버튼 생성하고, layout_number 레이아웃에 추가
@@ -66,15 +87,6 @@ class Main(QDialog):
                 layout_number.addWidget(number_button_dict[number], 5 - x, y + 1)
             elif number==0:
                 layout_number.addWidget(number_button_dict[number], 6, 2)
-
-        ### 소숫점 버튼과 00 버튼을 입력하고 시그널 설정
-        button_dot = QPushButton(".")
-        button_dot.clicked.connect(lambda state, num = ".": self.number_button_clicked(num))
-        layout_number.addWidget(button_dot, 6, 3)
-
-        button_double_zero = QPushButton("00")
-        button_double_zero.clicked.connect(lambda state, num = "+/-": self.number_button_clicked(num))
-        layout_number.addWidget(button_double_zero, 6, 1)
 
         ### 각 레이아웃을 main_layout 레이아웃에 추가
         main_layout.addLayout(layout_equation_solution)
