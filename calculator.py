@@ -1,17 +1,17 @@
 import sys
+import math
 from PyQt5.QtWidgets import *
 
 class Main(QDialog):
     def __init__(self):
         super().__init__()
         self.init_ui()
+        self.cache = ""
 
     def init_ui(self):
         main_layout = QVBoxLayout()
 
         ### 각 위젯을 배치할 레이아웃을 미리 만들어 둠
-        layout_operation = QHBoxLayout()
-        layout_clear_equal = QHBoxLayout()
         layout_number = QGridLayout()
         layout_equation_solution = QFormLayout()
 
@@ -90,8 +90,6 @@ class Main(QDialog):
 
         ### 각 레이아웃을 main_layout 레이아웃에 추가
         main_layout.addLayout(layout_equation_solution)
-        main_layout.addLayout(layout_operation)
-        main_layout.addLayout(layout_clear_equal)
         main_layout.addLayout(layout_number)
 
         self.setLayout(main_layout)
@@ -107,17 +105,29 @@ class Main(QDialog):
 
     def button_operation_clicked(self, operation):
         equation = self.equation.text()
-        equation += operation
-        self.equation.setText(equation)
+        # 캐시가 비어 있으면 캐시로 넣는다.
+        if self.cache == "":
+            self.cache = equation + operation
+            self.equation.setText("")
+            return
+        # 입력값이 없다면, 연산만 바꾼다.
+        if equation == "":
+            self.cache = self.cache[:-1] + operation
+            return
+        # 입력값이 있으면, 계산 후 캐시에 다시 저장한다.
+        value = eval(self.cache + equation)
+        self.cache = str(value) + operation
+        self.equation.setText("")
 
     def button_equal_clicked(self):
         equation = self.equation.text()
-        solution = eval(equation)
-        self.solution.setText(str(solution))
+        solution = eval(self.cache + equation)
+        self.cache = ""
+        self.equation.setText(str(solution))
 
     def button_clear_clicked(self):
+        self.cache = ""
         self.equation.setText("")
-        self.solution.setText("")
 
     def button_backspace_clicked(self):
         equation = self.equation.text()
