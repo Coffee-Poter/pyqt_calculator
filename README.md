@@ -14,3 +14,16 @@ https://studyingrabbit.tistory.com/23
 
 * PyQt5 모듈 설치(python - pip install pyqt5)
 * 파이썬 파일 실행 (python calculator.py)
+
+## Contributing
+
+Please read [CONTRIBUTING.md](https://github.com/leejaejjun/gui_calculater/blob/main/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Authors
+
+* **OH Jeonghun(coffee-poter)** - *Initial work* - student of pukyong national university
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/leejaejjun/gui_calculater/blob/main/README.md) file for details
+
